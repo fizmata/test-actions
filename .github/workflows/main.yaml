@@ -1,0 +1,33 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'application/**'
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build and push Docker image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_REGISTRY: your-docker-registry-url
+      run: |
+        # Set the context to the ./application directory
+        cd ./application
+
+        # Build and push the Docker image
+        docker build .
+        #docker buildx create --use
+        #docker buildx build -t $DOCKER_REGISTRY/your-image-name:latest . --push
